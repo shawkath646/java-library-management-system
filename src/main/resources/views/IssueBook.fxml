@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.IssueBookController">
+    
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Issue Book" styleClass="label-header"/>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+            <padding><Insets top="30" right="50" bottom="30" left="50"/></padding>
+            
+            <GridPane hgap="15" vgap="15" maxWidth="500">
+                <Label text="Select Book:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="bookComboBox" promptText="Choose a book" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="Select Member:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="memberComboBox" promptText="Choose a member" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Issue Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="issueDatePicker" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Due Date:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <DatePicker fx:id="dueDatePicker" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+            
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="Issue Book" styleClass="button-success" onAction="#handleIssueBook" prefWidth="120"/>
+                <Button text="Clear" onAction="#handleClear" prefWidth="120"/>
+                <Button text="Back to Dashboard" onAction="#handleBackToDashboard" prefWidth="150"/>
+            </HBox>
+            
+            <Separator prefWidth="500"/>
+            
+            <Label text="Currently Issued Books" styleClass="label-subheader"/>
+            
+            <TableView fx:id="issuedBooksTable" prefHeight="300" maxWidth="800">
+                <columns>
+                    <TableColumn text="Issue ID" prefWidth="80">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="issueId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Book ID" prefWidth="80">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="bookId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Member ID" prefWidth="100">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="memberId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Issue Date" prefWidth="120">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="issueDate"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Due Date" prefWidth="120">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="dueDate"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Status" prefWidth="100">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="returnDate"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+        </VBox>
+    </center>
+    
+</BorderPane>

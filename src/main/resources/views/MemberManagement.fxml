@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MemberManagementController">
+    
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Member Management" styleClass="label-header"/>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            
+            <!-- Search and Add Section -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search members..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearch"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add New Member" styleClass="button-success" onAction="#handleAddMember"/>
+            </HBox>
+            
+            <!-- Members Table -->
+            <TableView fx:id="membersTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="ID" prefWidth="50">
+                        <cellValueFactory><PropertyValueFactory property="memberId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Name" prefWidth="150">
+                        <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Email" prefWidth="200">
+                        <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Phone" prefWidth="120">
+                        <cellValueFactory><PropertyValueFactory property="phone"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Address" prefWidth="220">
+                        <cellValueFactory><PropertyValueFactory property="address"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <!-- Action Buttons -->
+            <HBox spacing="10">
+                <Button text="Edit Selected" onAction="#handleEditMember"/>
+                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteMember"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
+            </HBox>
+            
+        </VBox>
+    </center>
+    
+</BorderPane>

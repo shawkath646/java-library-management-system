@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ReturnBookController">
+    
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Return Book" styleClass="label-header"/>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            
+            <Label text="Currently Issued Books (Not Returned)" styleClass="label-subheader"/>
+            
+            <!-- Issued Books Table -->
+            <TableView fx:id="issuedBooksTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="Issue ID" prefWidth="80">
+                        <cellValueFactory><PropertyValueFactory property="issueId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Book ID" prefWidth="80">
+                        <cellValueFactory><PropertyValueFactory property="bookId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Book Title" prefWidth="200">
+                        <cellValueFactory><PropertyValueFactory property="bookTitle"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Member ID" prefWidth="90">
+                        <cellValueFactory><PropertyValueFactory property="memberId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Member Name" prefWidth="150">
+                        <cellValueFactory><PropertyValueFactory property="memberName"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Issue Date" prefWidth="100">
+                        <cellValueFactory><PropertyValueFactory property="issueDate"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Due Date" prefWidth="100">
+                        <cellValueFactory><PropertyValueFactory property="dueDate"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <!-- Return Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Return Date:"/>
+                <DatePicker fx:id="returnDatePicker" prefWidth="200"/>
+                <Button text="Return Selected Book" styleClass="button-success" onAction="#handleReturnBook"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
+                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
+            </HBox>
+            
+        </VBox>
+    </center>
+    
+</BorderPane>

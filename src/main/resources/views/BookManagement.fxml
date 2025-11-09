@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookManagementController">
+    
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <Label text="Book Management" styleClass="label-header"/>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <VBox spacing="15">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            
+            <!-- Search and Add Section -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search books..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearch"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add New Book" styleClass="button-success" onAction="#handleAddBook"/>
+            </HBox>
+            
+            <!-- Books Table -->
+            <TableView fx:id="booksTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="ID" prefWidth="50">
+                        <cellValueFactory><PropertyValueFactory property="bookId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Title" prefWidth="200">
+                        <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Author" prefWidth="150">
+                        <cellValueFactory><PropertyValueFactory property="author"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Publisher" prefWidth="150">
+                        <cellValueFactory><PropertyValueFactory property="publisher"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Category" prefWidth="100">
+                        <cellValueFactory><PropertyValueFactory property="category"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Quantity" prefWidth="80">
+                        <cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <!-- Action Buttons -->
+            <HBox spacing="10">
+                <Button text="Edit Selected" onAction="#handleEditBook"/>
+                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteBook"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
+            </HBox>
+            
+        </VBox>
+    </center>
+    
+</BorderPane>
