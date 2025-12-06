@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HistoryController">
+    
+    <!-- Top Bar -->
+    <top>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="←" onAction="#handleBack" styleClass="button-circle-back"/>
+                <Label text="Return History" styleClass="label-header"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <!-- Center Content -->
+    <center>
+        <VBox spacing="20" styleClass="content-pane">
+            <padding>
+                <Insets top="20" right="30" bottom="30" left="30"/>
+            </padding>
+            
+            <!-- Statistics Cards -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Total Returned -->
+                <VBox styleClass="content-pane" style="-fx-background-color: #E3F2FD;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    <Label text="Total Returned" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                    <Label fx:id="totalReturnedLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+                </VBox>
+                
+                <!-- On-Time Returns -->
+                <VBox styleClass="content-pane" style="-fx-background-color: #E8F5E9;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    <Label text="On-Time Returns" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                    <Label fx:id="onTimeReturnsLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
+                </VBox>
+                
+                <!-- Late Returns -->
+                <VBox styleClass="content-pane" style="-fx-background-color: #FFEBEE;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    <Label text="Late Returns" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                    <Label fx:id="lateReturnsLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #F44336;"/>
+                </VBox>
+            </HBox>
+            
+            <!-- Search and Actions -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Search:" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="searchField" promptText="Search by book title, member name, or issue ID..." prefHeight="35" maxWidth="600" prefWidth="600"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" styleClass="button-success" onAction="#handleRefresh" prefHeight="35" prefWidth="100"/>
+            </HBox>
+            
+            <!-- History Table -->
+            <VBox VBox.vgrow="ALWAYS">
+                <Label text="Returned Books" styleClass="label-header"/>
+                <TableView fx:id="historyTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="issueIdColumn" text="Issue ID" prefWidth="80" minWidth="60"/>
+                        <TableColumn fx:id="bookTitleColumn" text="Book Title" prefWidth="200" minWidth="150"/>
+                        <TableColumn fx:id="memberNameColumn" text="Member Name" prefWidth="150" minWidth="120"/>
+                        <TableColumn fx:id="issueDateColumn" text="Issue Date" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="returnDateColumn" text="Return Date" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="150" minWidth="120"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No returned books found" style="-fx-text-fill: #999; -fx-font-size: 14px;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+            
+            <!-- Legend -->
+            <HBox spacing="30" alignment="CENTER" style="-fx-padding: 10;">
+                <HBox spacing="10" alignment="CENTER">
+                    <Label text="●" style="-fx-text-fill: #4CAF50; -fx-font-size: 20px;"/>
+                    <Label text="On-Time Return" style="-fx-font-size: 12px;"/>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER">
+                    <Label text="●" style="-fx-text-fill: #F44336; -fx-font-size: 20px;"/>
+                    <Label text="Late Return" style="-fx-font-size: 12px;"/>
+                </HBox>
+            </HBox>
+            
+        </VBox>
+    </center>
+    
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="Color coding: Green = On-time, Red = Late" style="-fx-font-size: 12px;"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

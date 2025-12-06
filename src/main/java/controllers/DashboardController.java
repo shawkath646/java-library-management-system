@@ -124,6 +124,11 @@ public class DashboardController {
     }
     
     @FXML
+    private void showHistory() {
+        loadScene("views/History.fxml", "Return History");
+    }
+    
+    @FXML
     private void showAbout() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");

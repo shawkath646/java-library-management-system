@@ -228,6 +228,29 @@ public class IssuedBookDAO {
         return false;
     }
     
+    public List<IssuedBook> getReturnedBooks() {
+        List<IssuedBook> returnedBooks = new ArrayList<>();
+        String sql = "SELECT ib.*, b.title, m.name FROM issued_books ib " +
+                     "JOIN books b ON ib.book_id = b.book_id " +
+                     "JOIN members m ON ib.member_id = m.member_id " +
+                     "WHERE ib.return_date IS NOT NULL " +
+                     "ORDER BY ib.return_date DESC";
+        
+        try (Connection conn = DBUtil.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                returnedBooks.add(extractIssuedBookFromResultSet(rs));
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getting returned books: " + e.getMessage());
+        }
+        
+        return returnedBooks;
+    }
+    
     private IssuedBook extractIssuedBookFromResultSet(ResultSet rs) throws SQLException {
         IssuedBook issuedBook = new IssuedBook(
             rs.getInt("issue_id"),

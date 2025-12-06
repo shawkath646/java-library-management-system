@@ -65,6 +65,7 @@
                 <Button text="Manage Members" styleClass="button" onAction="#showMemberManagement"/>
                 <Button text="Issue Book" styleClass="button-success" onAction="#showIssueBook"/>
                 <Button text="Return Book" styleClass="button-warning" onAction="#showReturnBook"/>
+                <Button text="View History" styleClass="button" style="-fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#showHistory"/>
             </HBox>
             
             <Region VBox.vgrow="ALWAYS" minHeight="20" maxHeight="40"/>
