@@ -28,6 +28,9 @@ public class IssueBookController {
     private ComboBox<Member> memberComboBox;
     
     @FXML
+    private ComboBox<String> filterComboBox;
+    
+    @FXML
     private DatePicker issueDatePicker;
     
     @FXML
@@ -36,10 +39,17 @@ public class IssueBookController {
     @FXML
     private TableView<IssuedBook> issuedBooksTable;
     
+    @FXML
+    private Label bookInfoLabel;
+    
+    @FXML
+    private Label memberInfoLabel;
+    
     private BookDAO bookDAO;
     private MemberDAO memberDAO;
     private IssuedBookDAO issuedBookDAO;
     private ObservableList<IssuedBook> issuedBooksList;
+    private ObservableList<IssuedBook> allIssuedBooks;
     
     @FXML
     public void initialize() {
@@ -47,21 +57,80 @@ public class IssueBookController {
         memberDAO = new MemberDAO();
         issuedBookDAO = new IssuedBookDAO();
         issuedBooksList = FXCollections.observableArrayList();
+        allIssuedBooks = FXCollections.observableArrayList();
         issuedBooksTable.setItems(issuedBooksList);
+        
+        issuedBooksTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        issuedBooksTable.setOnMouseClicked(event -> {
+            if (event.getTarget() == issuedBooksTable || event.getPickResult().getIntersectedNode() == null) {
+                issuedBooksTable.getSelectionModel().clearSelection();
+            }
+        });
         
         setupComboBoxes();
         setupDatePickers();
+        setupFilterComboBox();
         loadIssuedBooks();
     }
     
+    private void setupFilterComboBox() {
+        filterComboBox.setValue("All");
+        filterComboBox.setOnAction(event -> applyDateFilter());
+    }
+    
+    private void applyDateFilter() {
+        String filter = filterComboBox.getValue();
+        if (filter == null || filter.equals("All")) {
+            issuedBooksList.clear();
+            issuedBooksList.addAll(allIssuedBooks);
+            return;
+        }
+        
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = null;
+        
+        switch (filter) {
+            case "Today":
+                startDate = today;
+                break;
+            case "Yesterday":
+                startDate = today.minusDays(1);
+                break;
+            case "This Week":
+                startDate = today.minusDays(today.getDayOfWeek().getValue() - 1);
+                break;
+            case "This Month":
+                startDate = today.withDayOfMonth(1);
+                break;
+        }
+        
+        if (startDate != null) {
+            LocalDate finalStartDate = startDate;
+            LocalDate endDate = filter.equals("Yesterday") ? startDate : today;
+            
+            issuedBooksList.clear();
+            issuedBooksList.addAll(
+                allIssuedBooks.stream()
+                    .filter(book -> {
+                        LocalDate issueDate = book.getIssueDate();
+                        return !issueDate.isBefore(finalStartDate) && !issueDate.isAfter(endDate);
+                    })
+                    .toList()
+            );
+        }
+    }
+    
     private void setupComboBoxes() {
-        // Load books
         ObservableList<Book> books = FXCollections.observableArrayList(bookDAO.getAllBooks());
         bookComboBox.setItems(books);
         bookComboBox.setConverter(new StringConverter<Book>() {
             @Override
             public String toString(Book book) {
-                return book != null ? book.getTitle() + " (ID: " + book.getBookId() + ")" : "";
+                if (book != null) {
+                    return String.format("%s - %s (Qty: %d)", book.getTitle(), book.getAuthor(), book.getQuantity());
+                }
+                return "";
             }
             
             @Override
@@ -70,13 +139,26 @@ public class IssueBookController {
             }
         });
         
-        // Load members
+        bookComboBox.setOnAction(event -> {
+            Book selectedBook = bookComboBox.getValue();
+            if (selectedBook != null) {
+                String info = String.format("Available: %d copies | Category: %s | Publisher: %s",
+                    selectedBook.getQuantity(), selectedBook.getCategory(), selectedBook.getPublisher());
+                bookInfoLabel.setText(info);
+            } else {
+                bookInfoLabel.setText("");
+            }
+        });
+        
         ObservableList<Member> members = FXCollections.observableArrayList(memberDAO.getAllMembers());
         memberComboBox.setItems(members);
         memberComboBox.setConverter(new StringConverter<Member>() {
             @Override
             public String toString(Member member) {
-                return member != null ? member.getName() + " (ID: " + member.getMemberId() + ")" : "";
+                if (member != null) {
+                    return String.format("%s - %s", member.getName(), member.getEmail());
+                }
+                return "";
             }
             
             @Override
@@ -84,19 +166,61 @@ public class IssueBookController {
                 return null;
             }
         });
+        
+        memberComboBox.setOnAction(event -> {
+            Member selectedMember = memberComboBox.getValue();
+            if (selectedMember != null) {
+                showMemberBorrowedBooks(selectedMember.getMemberId());
+                int borrowedCount = (int) issuedBooksList.stream()
+                    .filter(book -> !book.isReturned())
+                    .count();
+                String info = String.format("Currently borrowed: %d books | Phone: %s",
+                    borrowedCount, selectedMember.getPhone());
+                memberInfoLabel.setText(info);
+            } else {
+                memberInfoLabel.setText("");
+                loadIssuedBooks();
+            }
+        });
+    }
+    
+    private void showMemberBorrowedBooks(int memberId) {
+        issuedBooksList.clear();
+        
+        var memberBooks = allIssuedBooks.stream()
+            .filter(book -> book.getMemberId() == memberId)
+            .toList();
+        
+        for (IssuedBook issuedBook : memberBooks) {
+            Book book = bookDAO.getBookById(issuedBook.getBookId());
+            if (book != null) {
+                issuedBook.setBookTitle(book.getTitle());
+            }
+        }
+        
+        issuedBooksList.addAll(memberBooks);
     }
     
     private void setupDatePickers() {
-        // Set default issue date to today
         issueDatePicker.setValue(LocalDate.now());
         
-        // Set default due date to 14 days from today
         dueDatePicker.setValue(LocalDate.now().plusDays(14));
     }
     
     private void loadIssuedBooks() {
+        allIssuedBooks.clear();
         issuedBooksList.clear();
-        issuedBooksList.addAll(issuedBookDAO.getCurrentlyIssuedBooks());
+        var issuedBooks = issuedBookDAO.getCurrentlyIssuedBooks();
+        
+        for (IssuedBook issuedBook : issuedBooks) {
+            Book book = bookDAO.getBookById(issuedBook.getBookId());
+            if (book != null) {
+                issuedBook.setBookTitle(book.getTitle());
+            }
+        }
+        
+        allIssuedBooks.addAll(issuedBooks);
+        issuedBooksList.addAll(issuedBooks);
     }
     
     @FXML
@@ -106,7 +230,6 @@ public class IssueBookController {
         LocalDate issueDate = issueDatePicker.getValue();
         LocalDate dueDate = dueDatePicker.getValue();
         
-        // Validation
         if (selectedBook == null) {
             showWarning("Validation Error", "Please select a book!");
             return;
@@ -127,13 +250,11 @@ public class IssueBookController {
             return;
         }
         
-        // Check if book is available
         if (selectedBook.getQuantity() <= 0) {
             showWarning("Book Unavailable", "This book is currently not available!");
             return;
         }
         
-        // Create issued book
         IssuedBook issuedBook = new IssuedBook(
             selectedBook.getBookId(),
             selectedMember.getMemberId(),
@@ -141,13 +262,11 @@ public class IssueBookController {
             dueDate
         );
         
-        // Issue the book
         if (issuedBookDAO.issueBook(issuedBook)) {
             showSuccess("Book issued successfully!");
             handleClear();
             loadIssuedBooks();
             
-            // Refresh book list to show updated quantity
             setupComboBoxes();
         } else {
             showError("Error", "Could not issue the book. Please try again.");
@@ -173,10 +292,9 @@ public class IssueBookController {
             Parent root = loader.load();
             
             Stage stage = (Stage) bookComboBox.getScene().getWindow();
-            Scene scene = new Scene(root, 1000, 700);
-            scene.getStylesheets().add(getClass().getClassLoader().getResource("css/style.css").toExternalForm());
+            Scene scene = stage.getScene();
             
-            stage.setScene(scene);
+            scene.setRoot(root);
             stage.setTitle("Library Management System - Dashboard");
             
         } catch (IOException e) {

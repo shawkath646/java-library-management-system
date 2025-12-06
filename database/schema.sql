@@ -1,12 +1,6 @@
--- Library Management System Database Schema
--- Database: library_app
-
--- Create database
 CREATE DATABASE IF NOT EXISTS library_app;
 USE library_app;
 
--- Table: books
--- Stores all book information
 CREATE TABLE IF NOT EXISTS books (
     book_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -20,8 +14,6 @@ CREATE TABLE IF NOT EXISTS books (
     INDEX idx_category (category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Table: members
--- Stores library member information
 CREATE TABLE IF NOT EXISTS members (
     member_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -33,8 +25,6 @@ CREATE TABLE IF NOT EXISTS members (
     INDEX idx_email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Table: issued_books
--- Tracks book borrowing and returns
 CREATE TABLE IF NOT EXISTS issued_books (
     issue_id INT AUTO_INCREMENT PRIMARY KEY,
     book_id INT NOT NULL,
@@ -50,8 +40,6 @@ CREATE TABLE IF NOT EXISTS issued_books (
     INDEX idx_return_date (return_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Table: users (optional - for authentication)
--- Stores system user credentials
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -61,12 +49,9 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_username (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert default admin user (password: admin123)
--- Note: In production, passwords should be hashed
 INSERT INTO users (username, password, role) VALUES 
 ('admin', 'admin123', 'Admin');
 
--- Sample data for testing (optional)
 INSERT INTO books (title, author, publisher, category, quantity) VALUES
 ('The Great Gatsby', 'F. Scott Fitzgerald', 'Scribner', 'Fiction', 5),
 ('To Kill a Mockingbird', 'Harper Lee', 'J.B. Lippincott & Co.', 'Fiction', 3),
@@ -79,5 +64,4 @@ INSERT INTO members (name, email, phone, address) VALUES
 ('Jane Smith', 'jane.smith@email.com', '0987654321', '456 Oak Ave, Town'),
 ('Bob Johnson', 'bob.johnson@email.com', '5551234567', '789 Pine Rd, Village');
 
--- Display success message
 SELECT 'Database library_app created successfully!' AS Status;

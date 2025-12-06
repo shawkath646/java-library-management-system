@@ -25,6 +25,12 @@ public class BookManagementController {
     @FXML
     private TableView<Book> booksTable;
     
+    @FXML
+    private Button editButton;
+    
+    @FXML
+    private Button deleteButton;
+    
     private BookDAO bookDAO;
     private ObservableList<Book> booksList;
     
@@ -34,7 +40,50 @@ public class BookManagementController {
         booksList = FXCollections.observableArrayList();
         booksTable.setItems(booksList);
         
+        booksTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        booksTable.getSortOrder().clear();
+        
+        booksTable.setOnMouseClicked(event -> {
+            if (event.getTarget() == booksTable || event.getPickResult().getIntersectedNode() == null) {
+                booksTable.getSelectionModel().clearSelection();
+            }
+        });
+        
+        editButton.disableProperty().bind(
+            booksTable.getSelectionModel().selectedItemProperty().isNull()
+        );
+        deleteButton.disableProperty().bind(
+            booksTable.getSelectionModel().selectedItemProperty().isNull()
+        );
+        
         loadAllBooks();
+        setupKeyboardShortcuts();
+    }
+    
+    private void setupKeyboardShortcuts() {
+        booksTable.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case N:
+                    if (event.isControlDown()) {
+                        handleAddBook();
+                        event.consume();
+                    }
+                    break;
+                case F:
+                    if (event.isControlDown()) {
+                        searchField.requestFocus();
+                        event.consume();
+                    }
+                    break;
+                case F5:
+                    handleRefresh();
+                    event.consume();
+                    break;
+                default:
+                    break;
+            }
+        });
     }
     
     private void loadAllBooks() {
@@ -137,9 +186,10 @@ public class BookManagementController {
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
         
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setMinWidth(500);
         
         TextField titleField = new TextField(book != null ? book.getTitle() : "");
         TextField authorField = new TextField(book != null ? book.getAuthor() : "");
@@ -148,10 +198,15 @@ public class BookManagementController {
         TextField quantityField = new TextField(book != null ? String.valueOf(book.getQuantity()) : "0");
         
         titleField.setPromptText("Title");
+        titleField.setPrefWidth(350);
         authorField.setPromptText("Author");
+        authorField.setPrefWidth(350);
         publisherField.setPromptText("Publisher");
+        publisherField.setPrefWidth(350);
         categoryField.setPromptText("Category");
+        categoryField.setPrefWidth(350);
         quantityField.setPromptText("Quantity");
+        quantityField.setPrefWidth(350);
         
         grid.add(new Label("Title:"), 0, 0);
         grid.add(titleField, 1, 0);
@@ -205,10 +260,9 @@ public class BookManagementController {
             Parent root = loader.load();
             
             Stage stage = (Stage) booksTable.getScene().getWindow();
-            Scene scene = new Scene(root, 1000, 700);
-            scene.getStylesheets().add(getClass().getClassLoader().getResource("css/style.css").toExternalForm());
+            Scene scene = stage.getScene();
             
-            stage.setScene(scene);
+            scene.setRoot(root);
             stage.setTitle("Library Management System - Dashboard");
             
         } catch (IOException e) {

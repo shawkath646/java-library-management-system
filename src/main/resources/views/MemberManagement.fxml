@@ -10,7 +10,10 @@
     <top>
         <VBox spacing="10">
             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            <Label text="Member Management" styleClass="label-header"/>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="←" onAction="#handleBackToDashboard" styleClass="button-circle-back"/>
+                <Label text="Member Management" styleClass="label-header"/>
+            </HBox>
             <Separator/>
         </VBox>
     </top>
@@ -19,43 +22,37 @@
         <VBox spacing="15">
             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
             
-            <!-- Search and Add Section -->
+            <!-- Search and Action Buttons -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <TextField fx:id="searchField" promptText="Search members..." prefWidth="300"/>
                 <Button text="Search" onAction="#handleSearch"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="editButton" text="Edit Selected" onAction="#handleEditMember"/>
+                <Button fx:id="deleteButton" text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteMember"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
                 <Button text="Add New Member" styleClass="button-success" onAction="#handleAddMember"/>
             </HBox>
             
             <!-- Members Table -->
             <TableView fx:id="membersTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn text="ID" prefWidth="50">
+                    <TableColumn text="ID" prefWidth="60" minWidth="50">
                         <cellValueFactory><PropertyValueFactory property="memberId"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Name" prefWidth="150">
+                    <TableColumn text="Name" prefWidth="180" minWidth="120">
                         <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Email" prefWidth="200">
+                    <TableColumn text="Email" prefWidth="240" minWidth="150">
                         <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Phone" prefWidth="120">
+                    <TableColumn text="Phone" prefWidth="140" minWidth="100">
                         <cellValueFactory><PropertyValueFactory property="phone"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Address" prefWidth="220">
+                    <TableColumn text="Address" prefWidth="280" minWidth="150">
                         <cellValueFactory><PropertyValueFactory property="address"/></cellValueFactory>
                     </TableColumn>
                 </columns>
             </TableView>
-            
-            <!-- Action Buttons -->
-            <HBox spacing="10">
-                <Button text="Edit Selected" onAction="#handleEditMember"/>
-                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteMember"/>
-                <Button text="Refresh" onAction="#handleRefresh"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
-            </HBox>
             
         </VBox>
     </center>

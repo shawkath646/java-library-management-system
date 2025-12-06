@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import utils.DBUtil;
+import utils.KeyboardShortcutUtil;
 
 public class Main extends Application {
     
@@ -25,6 +26,9 @@ public class Main extends Application {
             primaryStage.setTitle("Library Management System");
             primaryStage.setScene(scene);
             primaryStage.setResizable(true);
+            
+            KeyboardShortcutUtil.applyShortcuts(scene, primaryStage);
+            
             primaryStage.show();
             
         } catch (Exception e) {

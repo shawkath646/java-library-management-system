@@ -25,6 +25,12 @@ public class MemberManagementController {
     @FXML
     private TableView<Member> membersTable;
     
+    @FXML
+    private Button editButton;
+    
+    @FXML
+    private Button deleteButton;
+    
     private MemberDAO memberDAO;
     private ObservableList<Member> membersList;
     
@@ -34,7 +40,50 @@ public class MemberManagementController {
         membersList = FXCollections.observableArrayList();
         membersTable.setItems(membersList);
         
+        membersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
+        membersTable.getSortOrder().clear();
+        
+        membersTable.setOnMouseClicked(event -> {
+            if (event.getTarget() == membersTable || event.getPickResult().getIntersectedNode() == null) {
+                membersTable.getSelectionModel().clearSelection();
+            }
+        });
+        
+        editButton.disableProperty().bind(
+            membersTable.getSelectionModel().selectedItemProperty().isNull()
+        );
+        deleteButton.disableProperty().bind(
+            membersTable.getSelectionModel().selectedItemProperty().isNull()
+        );
+        
         loadAllMembers();
+        setupKeyboardShortcuts();
+    }
+    
+    private void setupKeyboardShortcuts() {
+        membersTable.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case N:
+                    if (event.isControlDown()) {
+                        handleAddMember();
+                        event.consume();
+                    }
+                    break;
+                case F:
+                    if (event.isControlDown()) {
+                        searchField.requestFocus();
+                        event.consume();
+                    }
+                    break;
+                case F5:
+                    handleRefresh();
+                    event.consume();
+                    break;
+                default:
+                    break;
+            }
+        });
     }
     
     private void loadAllMembers() {
@@ -137,9 +186,10 @@ public class MemberManagementController {
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
         
         GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setMinWidth(500);
         
         TextField nameField = new TextField(member != null ? member.getName() : "");
         TextField emailField = new TextField(member != null ? member.getEmail() : "");
@@ -147,9 +197,13 @@ public class MemberManagementController {
         TextField addressField = new TextField(member != null ? member.getAddress() : "");
         
         nameField.setPromptText("Name");
+        nameField.setPrefWidth(350);
         emailField.setPromptText("Email");
+        emailField.setPrefWidth(350);
         phoneField.setPromptText("Phone");
+        phoneField.setPrefWidth(350);
         addressField.setPromptText("Address");
+        addressField.setPrefWidth(350);
         
         grid.add(new Label("Name:"), 0, 0);
         grid.add(nameField, 1, 0);
@@ -198,10 +252,9 @@ public class MemberManagementController {
             Parent root = loader.load();
             
             Stage stage = (Stage) membersTable.getScene().getWindow();
-            Scene scene = new Scene(root, 1000, 700);
-            scene.getStylesheets().add(getClass().getClassLoader().getResource("css/style.css").toExternalForm());
+            Scene scene = stage.getScene();
             
-            stage.setScene(scene);
+            scene.setRoot(root);
             stage.setTitle("Library Management System - Dashboard");
             
         } catch (IOException e) {

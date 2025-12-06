@@ -50,6 +50,12 @@ ehthumbs.db
 
 # Temporary files
 *.tmp
+*.pptx
+~$Presentation.pptx
+*.pdf
 
 # Database credentials (optional - uncomment to protect)
 # src/main/java/utils/DBUtil.java
+
+# Distribution folder
+dist/

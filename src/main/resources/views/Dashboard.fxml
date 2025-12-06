@@ -4,30 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
-    
-    <!-- Top Menu Bar -->
-    <top>
-        <MenuBar>
-            <Menu text="File">
-                <MenuItem text="Exit" onAction="#handleExit"/>
-            </Menu>
-            <Menu text="Books">
-                <MenuItem text="Manage Books" onAction="#showBookManagement"/>
-            </Menu>
-            <Menu text="Members">
-                <MenuItem text="Manage Members" onAction="#showMemberManagement"/>
-            </Menu>
-            <Menu text="Transactions">
-                <MenuItem text="Issue Book" onAction="#showIssueBook"/>
-                <MenuItem text="Return Book" onAction="#showReturnBook"/>
-            </Menu>
-            <Menu text="Help">
-                <MenuItem text="About" onAction="#showAbout"/>
-            </Menu>
-        </MenuBar>
-    </top>
-    
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">    
     <!-- Center Content Area -->
     <center>
         <VBox spacing="20" styleClass="content-pane">
@@ -42,35 +19,42 @@
             <Separator/>
             
             <!-- Dashboard Statistics -->
-            <GridPane hgap="20" vgap="20">
+            <HBox spacing="20" alignment="CENTER">
                 <!-- Total Books -->
-                <VBox styleClass="content-pane" style="-fx-background-color: #E3F2FD;" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <VBox styleClass="content-pane" style="-fx-background-color: #E3F2FD;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     <Label text="Total Books" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
                     <Label fx:id="totalBooksLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
                 </VBox>
                 
+                <!-- Available Books -->
+                <VBox styleClass="content-pane" style="-fx-background-color: #F3E5F5;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+                    <Label text="Available Books" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                    <Label fx:id="availableBooksLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #9C27B0;"/>
+                </VBox>
+                
                 <!-- Total Members -->
-                <VBox styleClass="content-pane" style="-fx-background-color: #E8F5E9;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <VBox styleClass="content-pane" style="-fx-background-color: #E8F5E9;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     <Label text="Total Members" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
                     <Label fx:id="totalMembersLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
                 </VBox>
                 
                 <!-- Currently Issued -->
-                <VBox styleClass="content-pane" style="-fx-background-color: #FFF3E0;" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <VBox styleClass="content-pane" style="-fx-background-color: #FFF3E0;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     <Label text="Currently Issued" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
                     <Label fx:id="currentlyIssuedLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #FF9800;"/>
                 </VBox>
                 
                 <!-- Overdue Books -->
-                <VBox styleClass="content-pane" style="-fx-background-color: #FFEBEE;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <VBox styleClass="content-pane" style="-fx-background-color: #FFEBEE;" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
                     <Label text="Overdue Books" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
                     <Label fx:id="overdueLabel" text="0" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #F44336;"/>
                 </VBox>
-            </GridPane>
+            </HBox>
             
             <Separator/>
             
@@ -83,13 +67,52 @@
                 <Button text="Return Book" styleClass="button-warning" onAction="#showReturnBook"/>
             </HBox>
             
+            <Region VBox.vgrow="ALWAYS" minHeight="20" maxHeight="40"/>
+            
+            <!-- Import/Export Options -->
+            <Label text="Import/Export" styleClass="label-header"/>
+            <HBox spacing="15">
+                <!-- Import Section -->
+                <VBox spacing="10" styleClass="card">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="Import Data" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    <VBox spacing="8">
+                        <Button text="Import Books (JSON)" onAction="#handleImportBooks" prefWidth="200" prefHeight="35"/>
+                        <Button text="Import Members (JSON)" onAction="#handleImportMembers" prefWidth="200" prefHeight="35"/>
+                    </VBox>
+                </VBox>
+                
+                <!-- Export Section -->
+                <VBox spacing="10" styleClass="card">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="Export Data" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    <VBox spacing="8">
+                        <Button text="Export Books (JSON)" styleClass="button-success" onAction="#handleExportBooks" prefWidth="200" prefHeight="35"/>
+                        <Button text="Export Members (JSON)" styleClass="button-success" onAction="#handleExportMembers" prefWidth="200" prefHeight="35"/>
+                    </VBox>
+                </VBox>
+                
+                <!-- Reports Section -->
+                <VBox spacing="10" styleClass="card">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="Generate Reports" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    <VBox spacing="8">
+                        <Button text="Export Report (PDF)" styleClass="button-warning" onAction="#handleExportPDFReport" prefWidth="200" prefHeight="35"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+            
         </VBox>
     </center>
     
     <!-- Bottom Status Bar -->
     <bottom>
-        <HBox styleClass="status-bar" alignment="CENTER_LEFT">
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="20">
             <Label fx:id="statusLabel" text="Ready"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userLabel" text="User: Admin" style="-fx-font-weight: bold;"/>
+            <Separator orientation="VERTICAL"/>
+            <Label fx:id="dateTimeLabel" text="" style="-fx-font-size: 12px;"/>
         </HBox>
     </bottom>
     

@@ -9,10 +9,12 @@ echo.
 
 set JAVAFX_LIB=lib\javafx-sdk-25.0.1\lib
 set MYSQL_JAR=lib\mysql-connector-j-8.0.33.jar
+set GSON_JAR=lib\gson\gson-2.10.1.jar
+set ITEXT_JAR=lib\itext\itextpdf-5.5.13.3.jar
 set OUTPUT_DIR=target\classes
 
 echo [1/3] Compiling Java sources...
-javac --module-path %JAVAFX_LIB% --add-modules javafx.controls,javafx.fxml -cp "%MYSQL_JAR%;%JAVAFX_LIB%\*" -d %OUTPUT_DIR% src\main\java\*.java src\main\java\controllers\*.java src\main\java\dao\*.java src\main\java\models\*.java src\main\java\utils\*.java
+javac --module-path %JAVAFX_LIB% --add-modules javafx.controls,javafx.fxml -cp "%MYSQL_JAR%;%GSON_JAR%;%ITEXT_JAR%;%JAVAFX_LIB%\*" -d %OUTPUT_DIR% src\main\java\*.java src\main\java\controllers\*.java src\main\java\dao\*.java src\main\java\models\*.java src\main\java\utils\*.java
 
 if %ERRORLEVEL% NEQ 0 (
     color 0C
@@ -35,7 +37,7 @@ echo [3/3] Launching application...
 echo Close the window when done.
 echo.
 
-java --module-path %JAVAFX_LIB% --add-modules javafx.controls,javafx.fxml -cp "%OUTPUT_DIR%;%MYSQL_JAR%" Main
+java --module-path %JAVAFX_LIB% --add-modules javafx.controls,javafx.fxml -cp "%OUTPUT_DIR%;%MYSQL_JAR%;%GSON_JAR%;%ITEXT_JAR%" Main
 
 if %ERRORLEVEL% NEQ 0 (
     color 0C
@@ -53,4 +55,3 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 echo Application closed successfully!
-pause

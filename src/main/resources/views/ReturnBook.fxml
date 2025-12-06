@@ -10,7 +10,10 @@
     <top>
         <VBox spacing="10">
             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            <Label text="Return Book" styleClass="label-header"/>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="←" onAction="#handleBackToDashboard" styleClass="button-circle-back"/>
+                <Label text="Return Book" styleClass="label-header"/>
+            </HBox>
             <Separator/>
         </VBox>
     </top>
@@ -24,26 +27,26 @@
             <!-- Issued Books Table -->
             <TableView fx:id="issuedBooksTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn text="Issue ID" prefWidth="80">
-                        <cellValueFactory><PropertyValueFactory property="issueId"/></cellValueFactory>
+                    <TableColumn text="Issue ID" prefWidth="100" minWidth="70">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="issueId"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Book ID" prefWidth="80">
-                        <cellValueFactory><PropertyValueFactory property="bookId"/></cellValueFactory>
+                    <TableColumn text="Book ID" prefWidth="100" minWidth="70">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="bookId"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Book Title" prefWidth="200">
-                        <cellValueFactory><PropertyValueFactory property="bookTitle"/></cellValueFactory>
+                    <TableColumn text="Book Title" prefWidth="250" minWidth="150">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="bookTitle"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Member ID" prefWidth="90">
-                        <cellValueFactory><PropertyValueFactory property="memberId"/></cellValueFactory>
+                    <TableColumn text="Member ID" prefWidth="110" minWidth="80">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="memberId"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Member Name" prefWidth="150">
-                        <cellValueFactory><PropertyValueFactory property="memberName"/></cellValueFactory>
+                    <TableColumn text="Member Name" prefWidth="180" minWidth="120">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="memberName"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Issue Date" prefWidth="100">
-                        <cellValueFactory><PropertyValueFactory property="issueDate"/></cellValueFactory>
+                    <TableColumn text="Issue Date" prefWidth="120" minWidth="90">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="issueDate"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Due Date" prefWidth="100">
-                        <cellValueFactory><PropertyValueFactory property="dueDate"/></cellValueFactory>
+                    <TableColumn text="Due Date" prefWidth="120" minWidth="90">
+                        <cellValueFactory><javafx.scene.control.cell.PropertyValueFactory property="dueDate"/></cellValueFactory>
                     </TableColumn>
                 </columns>
             </TableView>
@@ -52,10 +55,9 @@
             <HBox spacing="15" alignment="CENTER_LEFT">
                 <Label text="Return Date:"/>
                 <DatePicker fx:id="returnDatePicker" prefWidth="200"/>
-                <Button text="Return Selected Book" styleClass="button-success" onAction="#handleReturnBook"/>
+                <Button fx:id="returnButton" text="Return Selected Book" styleClass="button-success" onAction="#handleReturnBook"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button text="Refresh" onAction="#handleRefresh"/>
-                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
             </HBox>
             
         </VBox>

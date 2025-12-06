@@ -10,7 +10,10 @@
     <top>
         <VBox spacing="10">
             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
-            <Label text="Book Management" styleClass="label-header"/>
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="←" onAction="#handleBackToDashboard" styleClass="button-circle-back"/>
+                <Label text="Book Management" styleClass="label-header"/>
+            </HBox>
             <Separator/>
         </VBox>
     </top>
@@ -19,46 +22,40 @@
         <VBox spacing="15">
             <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
             
-            <!-- Search and Add Section -->
+            <!-- Search and Action Buttons -->
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <TextField fx:id="searchField" promptText="Search books..." prefWidth="300"/>
                 <Button text="Search" onAction="#handleSearch"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="editButton" text="Edit Selected" onAction="#handleEditBook"/>
+                <Button fx:id="deleteButton" text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteBook"/>
+                <Button text="Refresh" onAction="#handleRefresh"/>
                 <Button text="Add New Book" styleClass="button-success" onAction="#handleAddBook"/>
             </HBox>
             
             <!-- Books Table -->
             <TableView fx:id="booksTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn text="ID" prefWidth="50">
+                    <TableColumn text="ID" prefWidth="60" minWidth="50">
                         <cellValueFactory><PropertyValueFactory property="bookId"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Title" prefWidth="200">
+                    <TableColumn text="Title" prefWidth="250" minWidth="150">
                         <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Author" prefWidth="150">
+                    <TableColumn text="Author" prefWidth="180" minWidth="120">
                         <cellValueFactory><PropertyValueFactory property="author"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Publisher" prefWidth="150">
+                    <TableColumn text="Publisher" prefWidth="180" minWidth="120">
                         <cellValueFactory><PropertyValueFactory property="publisher"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Category" prefWidth="100">
+                    <TableColumn text="Category" prefWidth="120" minWidth="80">
                         <cellValueFactory><PropertyValueFactory property="category"/></cellValueFactory>
                     </TableColumn>
-                    <TableColumn text="Quantity" prefWidth="80">
+                    <TableColumn text="Quantity" prefWidth="100" minWidth="70">
                         <cellValueFactory><PropertyValueFactory property="quantity"/></cellValueFactory>
                     </TableColumn>
                 </columns>
             </TableView>
-            
-            <!-- Action Buttons -->
-            <HBox spacing="10">
-                <Button text="Edit Selected" onAction="#handleEditBook"/>
-                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDeleteBook"/>
-                <Button text="Refresh" onAction="#handleRefresh"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Back to Dashboard" onAction="#handleBackToDashboard"/>
-            </HBox>
             
         </VBox>
     </center>
